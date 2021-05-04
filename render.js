@@ -1,99 +1,155 @@
 (() => {
 	'use strict';
 
-	function* animations(href) {
-		const W = 32; // 1 フレームの横幅（px）
-		const H = 32; // 縦幅
-		const FPS = 9; // フレームレート
-		const F = 3; // フレーム数
-		const N = 4; // アニメーション数
+	const animParams = {};
 
-		const D = F / FPS; // 周期（s）
-
+	function* animations(href, width, height) {
 		const NS = 'http://www.w3.org/2000/svg';
 
-		for (let i = 0; i < N; i++) {
-			const svg = document.createElementNS(NS, 'svg');
-			svg.setAttribute('xmlns', NS);
+		const { frames, rows, columns, fps } = animParams;
 
-			svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-			svg.setAttribute('width', `${W}px`);
-			svg.setAttribute('height', `${H}px`);
+		const w0 = width / (columns * frames); // 1 フレームの横幅（px）
+		const w1 = width / columns; // 1 アニメーションの横幅（px）
+		const h0 = height / rows; // 1 フレームの縦幅（px）
+		const d = frames / fps; // 周期（s）
 
-			const image = document.createElementNS(NS, 'image');
-			image.setAttribute('href', href);
-			image.setAttribute('y', -i * H);
-			image.style.imageRendering = 'crisp-edges';
-			svg.appendChild(image);
+		for (let x = 0; x < columns; x++) {
+			const xs = [...Array(frames).keys()].map(i => -x * w1 - i * w0).join(';');
+			for (let y = 0; y < rows; y++) {
+				const svg = document.createElementNS(NS, 'svg');
+				svg.setAttribute('xmlns', NS);
 
-			const animate = document.createElementNS(NS, 'animate');
-			animate.setAttribute('attributeName', 'x');
-			animate.setAttribute('dur', `${D}s`);
-			animate.setAttribute('repeatCount', 'indefinite');
-			animate.setAttribute('calcMode', 'discrete');
-			animate.setAttribute('values', [...Array(F).keys()].map(j => -j * W).join(';'));
-			image.appendChild(animate);
+				svg.setAttribute('viewBox', `0 0 ${w0} ${h0}`);
+				svg.setAttribute('width', `${w0}px`);
+				svg.setAttribute('height', `${h0}px`);
 
-			yield svg;
+				const image = document.createElementNS(NS, 'image');
+				image.setAttribute('href', href);
+				image.setAttribute('x', -x * w1);
+				image.setAttribute('y', -y * h0);
+				image.style.imageRendering = 'crisp-edges';
+				svg.appendChild(image);
+
+				const animate = document.createElementNS(NS, 'animate');
+				animate.setAttribute('attributeName', 'x');
+				if (Number.isFinite(d)) {
+					animate.setAttribute('dur', `${d}s`);
+				}
+				animate.setAttribute('repeatCount', 'indefinite');
+				animate.setAttribute('calcMode', 'discrete');
+				animate.setAttribute('values', xs);
+				image.appendChild(animate);
+
+				yield svg;
+			}
 		}
 	}
 
-	const container = document.getElementById("view");
+	let href;
+	const imageView = document.getElementById("image");
+	const animationView = document.getElementById("animations");
 
-	function render(href) {
-		container.innerText = '';
-		for (const svg of animations(href)) {
-			container.appendChild(svg);
+	function render() {
+		function renderSVGs() {
+			animationView.innerText = '';
+			const w = imageView.naturalWidth;
+			const h = imageView.naturalHeight;
+			for (const svg of animations(href, w, h)) {
+				animationView.appendChild(svg);
+			}
+		}
+		if (!href) {
+			return;
+		}
+		animationView.innerText = '';
+		if (imageView.src === href) {
+			renderSVGs();
+		} else {
+			imageView.addEventListener('load', renderSVGs, { once: true });
+			imageView.src = href;
 		}
 	}
 
-	let objectURL;
 	window.addEventListener('popstate', e => {
-		if (objectURL) {
-			URL.revokeObjectURL(objectURL);
-			objectURL = undefined;
+		imageView.removeAttribute('src');
+		if (href) {
+			URL.revokeObjectURL(href);
 		}
 		const url = new URLSearchParams(location.search).get('url');
 		if (url) {
-			render(url);
+			href = url;
+			render();
 		} else if (e.state) {
-			objectURL = URL.createObjectURL(e.state);
-			render(objectURL);
+			href = URL.createObjectURL(e.state);
+			render();
 		} else {
-			container.innerText = '';
+			animationView.innerText = '';
 		}
 	});
 
-	const form = document.getElementById('avatarForm');
+	const form = document.getElementById('sprite-form');
 
 	form.addEventListener('submit', e => {
 		e.preventDefault();
 		if (e.target.url.value !== new URLSearchParams(location.search).get('url')) {
-			history.pushState(null, '', `?url=${e.target.url.value}`);
-			render(e.target.url.value);
-			if (objectURL) {
-				URL.revokeObjectURL(objectURL);
-				objectURL = undefined;
+			if (href) {
+				URL.revokeObjectURL(href);
 			}
+			href = e.target.url.value;
+			history.pushState(null, '', `?url=${href}`);
+			render();
 		}
 	});
 
 	form.image.addEventListener('change', e => {
 		const blob = e.target.files[0];
 		history.pushState(blob, '', location.pathname);
-		if (objectURL) {
-			URL.revokeObjectURL(objectURL);
+		if (href) {
+			URL.revokeObjectURL(href);
 		}
-		objectURL = URL.createObjectURL(blob);
-		render(objectURL);
+		href = URL.createObjectURL(blob);
+		render();
 	});
 
-	const url = new URLSearchParams(location.search).get('url');
+	function updateAnimParams() {
+		const frames = Number(form.frames.value);
+		const rows = Number(form.rows.value);
+		const columns = Number(form.columns.value);
+		const fps = Number(form.fps.value);
+		if (![frames, rows, columns, fps].some(x => Number.isNaN(x))) {
+			animParams.frames = frames;
+			animParams.rows = rows;
+			animParams.columns = columns;
+			animParams.fps = fps;
+		}
+		render();
+	}
+
+	for (const k of ['frames', 'rows', 'columns', 'fps']) {
+		form[k].addEventListener('change', updateAnimParams);
+	}
+
+	const params = new URLSearchParams(location.search);
+	for (const e of form.elements) {
+		if (e.name) {
+			const value = params.get(e.name);
+			if (value) {
+				try {
+					e.value = value;
+				} catch (DOMException) {
+					// noop
+				}
+			}
+		}
+	}
+	updateAnimParams();
+
+	const url = params.get('url');
 	if (url) {
-		form.url.value = url;
-		render(url);
+		href = form.url.value = url;
+		render();
 	} else if (history.state) {
-		objectURL = URL.createObjectURL(history.state);
-		render(objectURL);
+		href = URL.createObjectURL(history.state);
+		render();
 	}
 })();

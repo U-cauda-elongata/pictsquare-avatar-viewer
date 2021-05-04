@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8" />
-	<title>アバタービューアー</title>
+	<title>キャラクターチップビューアー</title>
 	<script src="render.js" defer=""></script>
 	<meta name="twitter:site" content="@U_caudaElongata" />
 	<meta name="twitter:site:id" content="1037918258052005888" />
@@ -11,17 +11,25 @@
 </head>
 <body>
 	<main>
-		<form id="avatarForm">
+		<form id="sprite-form">
 			<fieldset>
-				<legend>アバター画像</legend>
+				<legend>画像</legend>
 				<div>
 					<label>URL <input name="url" type="url" /></label>
 					<input type="submit" value="表示" />
 				</div>
 				<div><label>アップロード <input name="image" type="file" /></label></div>
+				<div><img id="image" /></div>
+			</fieldset>
+			<fieldset>
+				<legend>アニメーション</legend>
+				<label>フレーム数 <input name="frames" type="number" min="1" value="3" /></label>
+				<label>行数 <input name="rows" type="number" min="0" value="4" /></label>
+				<label>列数 <input name="columns" type="number" min="0" value="1" /></label>
+				<label>フレームレート <input name="fps" type="number" min="0" value="9" /></label>
 			</fieldset>
 		</form>
-		<section id="view"></section>
+		<section id="animations"></section>
 	</main>
 </body>
 </html>
