@@ -1,5 +1,33 @@
+@media screen and (min-width: 500px) {
+	#sprite-form {
+		float: right;
+	}
+}
+
+.image-fields > div {
+	margin: 5px;
+}
+
+.text-input-container {
+	display: flex;
+}
+
+.text-input-container > input:first-of-type {
+	flex-basis: 100%;
+}
+
+.image-container {
+	text-align: center;
+}
+
 #image {
 	image-rendering: crisp-edges;
+}
+
+.animation-fields {
+	display: grid;
+	grid-template-columns: max-content max-content;
+	gap: 5px;
 }
 
 #animations {
