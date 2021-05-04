@@ -47,13 +47,53 @@
 		}
 	}
 
-	const form = document.getElementById('avatarForm');
-	let href;
-	form.avatar.addEventListener('change', e => {
-		if (href) {
-			URL.revokeObjectURL(href);
+	let objectURL;
+	window.addEventListener('popstate', e => {
+		if (objectURL) {
+			URL.revokeObjectURL(objectURL);
+			objectURL = undefined;
 		}
-		href = URL.createObjectURL(e.target.files[0]);
-		render(href);
+		const url = new URLSearchParams(location.search).get('url');
+		if (url) {
+			render(url);
+		} else if (e.state) {
+			objectURL = URL.createObjectURL(e.state);
+			render(objectURL);
+		} else {
+			container.innerText = '';
+		}
 	});
+
+	const form = document.getElementById('avatarForm');
+
+	form.addEventListener('submit', e => {
+		e.preventDefault();
+		if (e.target.url.value !== new URLSearchParams(location.search).get('url')) {
+			history.pushState(null, '', `?url=${e.target.url.value}`);
+			render(e.target.url.value);
+			if (objectURL) {
+				URL.revokeObjectURL(objectURL);
+				objectURL = undefined;
+			}
+		}
+	});
+
+	form.image.addEventListener('change', e => {
+		const blob = e.target.files[0];
+		history.pushState(blob, '', location.pathname);
+		if (objectURL) {
+			URL.revokeObjectURL(objectURL);
+		}
+		objectURL = URL.createObjectURL(blob);
+		render(objectURL);
+	});
+
+	const url = new URLSearchParams(location.search).get('url');
+	if (url) {
+		form.url.value = url;
+		render(url);
+	} else if (history.state) {
+		objectURL = URL.createObjectURL(history.state);
+		render(objectURL);
+	}
 })();

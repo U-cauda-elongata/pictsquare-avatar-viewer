@@ -12,9 +12,16 @@
 <body>
 	<main>
 		<form id="avatarForm">
-			<label>アバター画像<input name="avatar" type="file" /></label>
+			<fieldset>
+				<legend>アバター画像</legend>
+				<div>
+					<label>URL <input name="url" type="url" /></label>
+					<input type="submit" value="表示" />
+				</div>
+				<div><label>アップロード <input name="image" type="file" /></label></div>
+			</fieldset>
 		</form>
-		<section id="view"></div>
+		<section id="view"></section>
 	</main>
 </body>
 </html>
