@@ -54,6 +54,8 @@
 			animationView.innerText = '';
 			const w = imageView.naturalWidth;
 			const h = imageView.naturalHeight;
+			const w0 = w / (animParams.columns * animParams.frames);
+			animationView.style.width = `${w0}px`;
 			for (const svg of animations(href, w, h)) {
 				animationView.appendChild(svg);
 			}

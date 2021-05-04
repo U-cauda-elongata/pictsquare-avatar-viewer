@@ -1,0 +1,51 @@
+#image {
+	image-rendering: crisp-edges;
+}
+
+#animations {
+	display: grid;
+}
+
+#animations > :nth-child(1) {
+	grid-column: 2;
+	grid-row: 3;
+}
+
+#animations > :nth-child(2) {
+	grid-column: 1;
+	grid-row: 2;
+}
+
+#animations > :nth-child(3) {
+	grid-column: 3;
+	grid-row: 2;
+}
+
+#animations > :nth-child(4) {
+	grid-column: 2;
+	grid-row: 1;
+}
+
+#animations > :nth-child(5) {
+	grid-column: 1;
+	grid-row: 3;
+}
+
+#animations > :nth-child(6) {
+	grid-column: 3;
+	grid-row: 3;
+}
+
+#animations > :nth-child(7) {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+#animations > :nth-child(8) {
+	grid-column: 3;
+	grid-row: 1;
+}
+
+#animations > * {
+	grid-row: 4;
+}
