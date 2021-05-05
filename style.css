@@ -51,6 +51,13 @@
 
 #animations {
 	display: grid;
+	width: min-content;
+}
+
+#animations::before {
+	content: "";
+	grid-column: 2;
+	grid-row: 2;
 }
 
 #animations > :nth-child(1) {
@@ -91,8 +98,4 @@
 #animations > :nth-child(8) {
 	grid-column: 3;
 	grid-row: 1;
-}
-
-#animations > * {
-	grid-row: 4;
 }
