@@ -22,6 +22,8 @@
 				svg.setAttribute('viewBox', `0 0 ${w0} ${h0}`);
 				svg.setAttribute('width', `${w0}px`);
 				svg.setAttribute('height', `${h0}px`);
+				svg.setAttribute('role', 'img');
+				svg.setAttribute('aria-label', 'アニメーション');
 
 				const image = document.createElementNS(NS, 'image');
 				image.setAttribute('href', href);

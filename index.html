@@ -12,45 +12,45 @@
 	<meta name="twitter:creator:id" content="1037918258052005888" />
 </head>
 <body>
+	<form id="sprite-form">
+		<fieldset class="image-fields">
+			<legend>画像</legend>
+			<div class="text-input-container">
+				<label for="url-input">URL</label>
+				<input id="url-input" name="url" type="url" />
+				<input type="submit" value="表示" />
+			</div>
+			<div>
+				<label for="image-input">アップロード</label
+				><input id="image-input" name="image" type="file" />
+			</div>
+			<input id="grid-checkbox" name="grid" type="checkbox" checked
+			/><label for="grid-checkbox">グリッド表示</label>
+			<div class="image-container" role="img" aria-label="プレビュー">
+				<img id="image" alt="" />
+				<svg aria-hidden="true">
+					<defs>
+						<pattern id="grid" width="100%" height="100%" patternUnits="userSpaceOnUse">
+							<rect width="100%" height="100%" fill="none" stroke="#000" />
+						</pattern>
+					</defs>
+					<rect width="100%" height="100%" stroke="#000" fill="url(#grid)" />
+				</svg>
+			</div>
+		</fieldset>
+		<fieldset class="animation-fields">
+			<legend>アニメーション</legend>
+			<label for="frames-input">フレーム数</label>
+			<input id="frames-input" name="frames" type="number" min="1" value="3" />
+			<label for="rows-input">行数</label>
+			<input id="rows-input" name="rows" type="number" min="0" value="4" />
+			<label for="columns-input">列数</label>
+			<input id="columns-input" name="columns" type="number" min="0" value="1" />
+			<label for="fps-input">フレームレート</label>
+			<input id="fps-input" name="fps" type="number" min="0" value="9" />
+		</fieldset>
+	</form>
 	<main>
-		<form id="sprite-form">
-			<fieldset class="image-fields">
-				<legend>画像</legend>
-				<div class="text-input-container">
-					<label for="url-input">URL</label>
-					<input id="url-input" name="url" type="url" />
-					<input type="submit" value="表示" />
-				</div>
-				<div>
-					<label for="image-input">アップロード</label
-					><input id="image-input" name="image" type="file" />
-				</div>
-				<input id="grid-checkbox" name="grid" type="checkbox" checked
-				/><label for="grid-checkbox">グリッド表示</label>
-				<div class="image-container">
-					<img id="image" />
-					<svg>
-						<defs>
-							<pattern id="grid" width="100%" height="100%" patternUnits="userSpaceOnUse">
-								<rect width="100%" height="100%" fill="none" stroke="#000" />
-							</pattern>
-						</defs>
-						<rect width="100%" height="100%" stroke="#000" fill="url(#grid)" />
-					</svg>
-				</div>
-			</fieldset>
-			<fieldset class="animation-fields">
-				<legend>アニメーション</legend>
-				<label for="frames-input">フレーム数</label>
-				<input id="frames-input" name="frames" type="number" min="1" value="3" />
-				<label for="rows-input">行数</label>
-				<input id="rows-input" name="rows" type="number" min="0" value="4" />
-				<label for="columns-input">列数</label>
-				<input id="columns-input" name="columns" type="number" min="0" value="1" />
-				<label for="fps-input">フレームレート</label>
-				<input id="fps-input" name="fps" type="number" min="0" value="9" />
-			</fieldset>
-		</form>
 		<section id="animations"></section>
 	</main>
 </body>
