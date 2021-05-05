@@ -24,7 +24,19 @@
 					<label for="image-input">アップロード</label
 					><input id="image-input" name="image" type="file" />
 				</div>
-				<div class="image-container"><img id="image" /></div>
+				<input id="grid-checkbox" name="grid" type="checkbox" checked
+				/><label for="grid-checkbox">グリッド表示</label>
+				<div class="image-container">
+					<img id="image" />
+					<svg>
+						<defs>
+							<pattern id="grid" width="100%" height="100%" patternUnits="userSpaceOnUse">
+								<rect width="100%" height="100%" fill="none" stroke="#000" />
+							</pattern>
+						</defs>
+						<rect width="100%" height="100%" stroke="#000" fill="url(#grid)" />
+					</svg>
+				</div>
 			</fieldset>
 			<fieldset class="animation-fields">
 				<legend>アニメーション</legend>

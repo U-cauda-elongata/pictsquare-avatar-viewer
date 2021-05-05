@@ -4,7 +4,7 @@
 	}
 }
 
-.image-fields > div {
+.image-fields > * {
 	margin: 5px;
 }
 
@@ -17,7 +17,26 @@
 }
 
 .image-container {
-	text-align: center;
+	position: relative;
+	margin: auto;
+	background: url(data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%202%202%22%20width=%222px%22%20height=%222px%22%3E%3Cdefs%3E%3Cpattern%20id=%22checker%22%20width=%222%22%20height=%222%22%3E%3Crect%20width=%221%22%20height=%221%22%20fill=%22%23CCC%22%20/%3E%3Crect%20x=%221%22%20y=%221%22%20width=%221%22%20height=%221%22%20fill=%22%23CCC%22%20/%3E%3C/pattern%3E%3C/defs%3E%3Crect%20width=%22100%25%22%20height=%22100%25%22%20fill=%22%23EEE%22%20/%3E%3Crect%20width=%22100%25%22%20height=%22100%25%22%20fill=%22url%28%23checker%29%22%20/%3E%3C/svg%3E) 0 0 / 10px repeat;
+	width: min-content;
+}
+
+.image-container > img {
+	display: block;
+}
+
+.image-container > svg {
+	position: absolute;
+	overflow: visible;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#grid-checkbox:not(:checked) ~ .image-container > svg {
+	display: none;
 }
 
 #image {

@@ -48,6 +48,7 @@
 	let href;
 	const imageView = document.getElementById("image");
 	const animationView = document.getElementById("animations");
+	const grid = document.getElementById("grid");
 
 	function render() {
 		function renderSVGs() {
@@ -55,7 +56,10 @@
 			const w = imageView.naturalWidth;
 			const h = imageView.naturalHeight;
 			const w0 = w / (animParams.columns * animParams.frames);
+			const h0 = h / animParams.rows;
 			animationView.style.width = `${w0}px`;
+			grid.setAttribute('width', w0);
+			grid.setAttribute('height', h0);
 			for (const svg of animations(href, w, h)) {
 				animationView.appendChild(svg);
 			}
